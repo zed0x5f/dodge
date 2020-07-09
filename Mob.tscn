@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://mob.gd" type="Script" id=1]
 [ext_resource path="res://dodge_assets/art/enemyFlyingAlt_2.png" type="Texture" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://dodge_assets/art/enemySwimming_2.png" type="Texture" id=5]
 [ext_resource path="res://dodge_assets/art/enemyWalking_1.png" type="Texture" id=6]
 [ext_resource path="res://dodge_assets/art/enemyWalking_2.png" type="Texture" id=7]
+[ext_resource path="res://dodge_assets/art/home.png" type="Texture" id=8]
+[ext_resource path="res://dodge_assets/art/pugsby-house.jpg" type="Texture" id=9]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -24,6 +26,11 @@ animations = [ {
 "loop": true,
 "name": "swim",
 "speed": 3.0
+}, {
+"frames": [ ExtResource( 8 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "house",
+"speed": 2.0
 } ]
 
 [sub_resource type="CapsuleShape2D" id=2]
@@ -33,6 +40,8 @@ height = 22.6333
 [node name="mob" type="RigidBody2D"]
 collision_mask = 0
 gravity_scale = 0.0
+contacts_reported = 4
+contact_monitor = true
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true
@@ -41,13 +50,14 @@ __meta__ = {
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 0.75, 0.75 )
 frames = SubResource( 1 )
-animation = "walk"
+animation = "house"
+frame = 1
 playing = true
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
 shape = SubResource( 2 )
-
-[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
-[connection signal="mouse_entered" from="." to="." method="_on_mob_mouse_entered"]
+[connection signal="body_entered" from="." to="." method="_on_mob_entered"]
 [connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

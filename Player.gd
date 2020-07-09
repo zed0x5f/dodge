@@ -1,7 +1,20 @@
 extends Area2D
-signal hit
 
-export var speed = 400  # How fast the player will move (pixels/sec).
+signal player_hit
+#i forgot to connect the event to this function
+func _on_Player_body_entered(body):
+	#I DONT KNOW WHAT IM DOING BUT MOB ISN'T
+	# DETECTING COLLISION WITH 2D Area
+	if(body.has_method("_on_mob_entered")):
+		#engage elite hacks
+		body._on_mob_entered(self)
+		
+	print("signal emitted")
+	emit_signal("player_hit")
+
+# How fast the player will move (pixels/sec).
+export var speed = 400  
+
 var screen_size  # Size of the game window.
 
 # Declare member variables here. Examples:
@@ -53,8 +66,8 @@ func _process(delta):
 	position.x = clamp(position.x, 0, screen_size.x)
 	position.y = clamp(position.y, 0, screen_size.y)
 
-#i forgot to connect the event to this function
-func _on_Player_body_entered(_body):
-	hide()  # Player disappears after being hit.
-	emit_signal("hit")
+
+
+func die():
+	hide()  # Player disappears after being hit.s
 	$CollisionShape2D.set_deferred("disabled", true)
